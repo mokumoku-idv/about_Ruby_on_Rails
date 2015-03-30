@@ -72,8 +72,64 @@ $ rails generate scaffold モデル名 フィールド名1:データ型1 ...
 参考URL: http://www.techscore.com/tech/Ruby/Rails/quick-start/Rails4/4-1/
 
 ## ページャを簡単に導入できるkaminari
-下記ページを見てそのまま導入すると、簡単にページャ機能ができた  
-参考URL: http://ruby-rails.hatenadiary.com/entry/20141113/1415874683
+* gem
+```
+$ gem 'kaminari'
+```
+
+* 「何件中何件表示」を入れる  
+viewファイルの挿入したい箇所に下記の１行を入れる
+```
+<%= page_entries_info @hoge %>
+```
+
+* ページャーを入れる  
+viewファイルの挿入したい箇所に下記の１行を入れる
+```
+<%= paginate @hoge %>
+```
+
+* ページャーの機能を含んだデータ取得  
+controllerのデータ取得部分を修正
+```
+@hoge = Foo.all
+↓
+@hoge = Foo.page(params[:page])
+```
+
+* order句を指定したい場合
+```
+@hoge = Foo.order("created_at DESC").page(params[:page])
+```
+
+* where句を入れたい場合が少し特殊
+```
+sql = Foo.where(:カラム名 => 値)
+@hoge = Kaminari.paginate_array(sql).page(params[:page])
+```
+
+ここまででページャーが導入完了  
+ページャーをカスタマイズするにはさらに続く  
+
+* 表示件数などデフォルト値以外に変える  
+設定ファイルを作成（作成されたファイルはアプリケーション全体の設定に反映される）
+```
+rails g kaminari:config
+```
+個別に設定する(例. モデルクラスに下記のように追加)
+```
+paginates_per 5  # 1ページあたり5項目表示
+```
+
+* 見た目の変更  
+bootstrap3を適用
+```
+$ rails g kaminari:views bootstrap3
+```
+
+下記ページを参考にした  
+参考URL: http://ruby-rails.hatenadiary.com/entry/20141113/1415874683  
+公式ページ: https://github.com/amatsuda/kaminari
 
 ## APIの開発で使われているGrape
 このあたりを参考にした  

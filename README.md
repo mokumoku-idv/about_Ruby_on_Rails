@@ -39,13 +39,26 @@ $ rails s
 ```
 localhost:3000でアクセス可能
 
+## マイグレーション（migration）
+* マイグレーションとは  
+直接SQLを使わずに、データベースのテーブルやカラムなどの構造を変更できる仕組み  
+
+このあたりを参考にした  
+参考URL: http://railsdoc.com/migration  
+参考URL: http://ruby-rails.hatenadiary.com/entry/20140810/1407634200  
+
+
+## ファイル自動生成のコマンド一覧
+上記マイグレーションを含め、いろいろなファイル自動生成のコマンドがある  
+ここを見たほうが早い  
+
+参考URL: http://techracho.bpsinc.jp/shibuya/2014_07_24/18388  
+
 ## Toolなどの開発に便利なscaffold
 * scaffoldとは  
-```
 データベースのテーブルへの登録（CREATE）、参照（READ）、更新（UPDATE）、削除（DELETE）を行う、  
 Webアプリケーションのひな形となるソースコードを自動生成する。  
 scaffoldを実行させれば、最低限のCRUDを行うWebアプリケーションを作成することができる。
-```
 
 * scaffold作成コマンド
 ```

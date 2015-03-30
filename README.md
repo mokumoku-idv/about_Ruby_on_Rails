@@ -39,6 +39,11 @@ $ rails s
 ```
 localhost:3000でアクセス可能
 
+## RailsのローカルDBにアクセス
+```
+$ rails db
+```
+
 ## マイグレーション（migration）
 * マイグレーションとは  
 直接SQLを使わずに、データベースのテーブルやカラムなどの構造を変更できる仕組み  
@@ -46,7 +51,6 @@ localhost:3000でアクセス可能
 このあたりを参考にした  
 参考URL: http://railsdoc.com/migration  
 参考URL: http://ruby-rails.hatenadiary.com/entry/20140810/1407634200  
-
 
 ## ファイル自動生成のコマンド一覧
 上記マイグレーションを含め、いろいろなファイル自動生成のコマンドがある  
@@ -70,6 +74,15 @@ $ rails generate scaffold モデル名 フィールド名1:データ型1 ...
 このコマンドで作成されるmigrateファイルを直接編集する。  
 
 参考URL: http://www.techscore.com/tech/Ruby/Rails/quick-start/Rails4/4-1/
+
+## scaffoldで生成されたControllerのコード
+* respond_withとは
+```
+respond_with(@hoge)
+```
+上記１行で、下記ページに記載されている、「respond_toメソッドを使った形式の選択」と同じことを行うことができる  
+http://www.rubylife.jp/rails/controller/index7.html
+
 
 ## ページャを簡単に導入できるkaminari
 * gem

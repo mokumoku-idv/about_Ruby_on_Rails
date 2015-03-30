@@ -56,7 +56,7 @@ localhost:3000でアクセス可能
 
 ## Toolなどの開発に便利なscaffold
 * scaffoldとは  
-データベースのテーブルへの登録（CREATE）、参照（READ）、更新（UPDATE）、削除（DELETE）を行う、  
+データベースのテーブルへの登録（CREATE）、参照（READ）、更新（UPDATE）、削除（DELETE）を行う、
 Webアプリケーションのひな形となるソースコードを自動生成する。  
 scaffoldを実行させれば、最低限のCRUDを行うWebアプリケーションを作成することができる。
 
@@ -132,6 +132,125 @@ $ rails g kaminari:views bootstrap3
 公式ページ: https://github.com/amatsuda/kaminari
 
 ## APIの開発で使われているGrape
+プログラムは公式ページのサンプルを使用  
+
+* Grapeとは
+    * REST-likeなAPIのためのマイクロフレークワーク
+    * Rack上で単体で、もしくはRailsやSinatraなどと組み合わせて動く
+    * RESTful APIを簡単に作るためのDSL(ドメイン固有言語)
+
+* gem
+```
+gem 'grape'
+```
+
+* APIファイルの置き場所
+```
+app/api
+```
+
+* APIファイルを読み込めるようにするための設定  
+application.rbに以下を追加
+```
+config.paths.add File.join('app', 'api'), glob: File.join('**', '*.rb')
+config.autoload_paths += Dir[Rails.root.join('app', 'api', '*')]
+```
+config/routes.rbに以下を追加
+```
+mount Twitter::API => '/'
+```
+
+* APIプログラム
+```
+module Twitter
+  class API < Grape::API
+    version 'v1', using: :header, vendor: 'twitter'
+    format :json
+    prefix :api
+
+    helpers do
+      def current_user
+        @current_user ||= User.authorize!(env)
+      end
+
+      def authenticate!
+        error!('401 Unauthorized', 401) unless current_user
+      end
+    end
+
+    resource :statuses do
+      desc "Return a public timeline."
+      get :public_timeline do
+        Status.limit(20)
+      end
+
+      desc "Return a personal timeline."
+      get :home_timeline do
+        authenticate!
+        current_user.statuses.limit(20)
+      end
+
+      desc "Return a status."
+      params do
+        requires :id, type: Integer, desc: "Status id."
+      end
+      route_param :id do
+        get do
+          Status.find(params[:id])
+        end
+      end
+
+      desc "Create a status."
+      params do
+        requires :status, type: String, desc: "Your status."
+      end
+      post do
+        authenticate!
+        Status.create!({
+          user: current_user,
+          text: params[:status]
+        })
+      end
+
+      desc "Update a status."
+      params do
+        requires :id, type: String, desc: "Status ID."
+        requires :status, type: String, desc: "Your status."
+      end
+      put ':id' do
+        authenticate!
+        current_user.statuses.find(params[:id]).update({
+          user: current_user,
+          text: params[:status]
+        })
+      end
+
+      desc "Delete a status."
+      params do
+        requires :id, type: String, desc: "Status ID."
+      end
+      delete ':id' do
+        authenticate!
+        current_user.statuses.find(params[:id]).destroy
+      end
+    end
+  end
+end
+```
+「desc〜」で機能の説明を記述できる  
+「get」「post」「put」「delete」と、HTTPのメソッドに対応した処理を定義できる  
+「params〜」でパラメータを定義し、「require」で必須かを定義している  
+
+* 呼び出し方法
+```
+GET /api/statuses/public_timeline
+GET /api/statuses/home_timeline
+GET /api/statuses/:id
+POST /api/statuses
+PUT /api/statuses/:id
+DELETE /api/statuses/:id
+```
+
 このあたりを参考にした  
-参考URL: https://github.com/intridea/grape  
+公式ページ: https://github.com/intridea/grape  
 参考URL: http://dev.classmethod.jp/server-side/ruby-on-rails/ruby-on-rails_create_grape_web-api/

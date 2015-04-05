@@ -58,6 +58,16 @@ $ rails db
 
 参考URL: http://techracho.bpsinc.jp/shibuya/2014_07_24/18388  
 
+## DBに初期データを入れる  
+* db/seeds.rbファイルに挿入データを入れるためのコードを書く(下記は例)
+```
+cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
+```
+* 下記コマンド実行
+```
+$ rake db:seed
+```
+
 ## Toolなどの開発に便利なscaffold
 * scaffoldとは  
 データベースのテーブルへの登録（CREATE）、参照（READ）、更新（UPDATE）、削除（DELETE）を行う、

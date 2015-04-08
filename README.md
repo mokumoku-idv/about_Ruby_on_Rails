@@ -44,6 +44,11 @@ localhost:3000でアクセス可能
 $ rails db
 ```
 
+## URIとControllerの結びつき確認
+```
+$ rake routes
+```
+
 ## マイグレーション（migration）
 * マイグレーションとは  
 直接SQLを使わずに、データベースのテーブルやカラムなどの構造を変更できる仕組み  
@@ -277,3 +282,20 @@ DELETE /api/statuses/:id
 このあたりを参考にした  
 公式ページ: https://github.com/intridea/grape  
 参考URL: http://dev.classmethod.jp/server-side/ruby-on-rails/ruby-on-rails_create_grape_web-api/
+
+## ユーザー管理系のページの自動生成が可能 devise  
+この項目はまだ途中です
+* 作成コマンド
+gem
+```
+gem 'devise'
+```
+
+* 実行コマンド
+```
+$ rails generate devise:install
+$ rails generate devise User
+```
+
+ここを参考に  
+http://ruby-rails.hatenadiary.com/entry/20140801/1406907000

@@ -284,18 +284,40 @@ DELETE /api/statuses/:id
 参考URL: http://dev.classmethod.jp/server-side/ruby-on-rails/ruby-on-rails_create_grape_web-api/
 
 ## ユーザー管理系のページの自動生成が可能 devise  
-この項目はまだ途中です
-* 作成コマンド
-gem
+* gem
 ```
 gem 'devise'
 ```
 
 * 実行コマンド
 ```
-$ rails generate devise:install
-$ rails generate devise User
+$ rails generate devise:install   // ここで初期設定を聞かれるので、指示通り設定する
+
+$ rails generate devise User    // Userモデルの作成(必要に応じて、作成されたマイグレーションファイルを修正する)
+
+$ rake db:migrate   // マイグレートの実行
+```
+  
+ここまでで基本的な機能が備わったページの作成が完了  
+  
+* 見た目を整える（bootstrap）  
+* gem
+```
+gem 'devise-bootstrap-views'
+```
+  
+* cssの追加  
+下記のコードを追加(app/assets/stylesheets/application.css)
+```
+*= require devise_bootstrap_views
+```
+
+* 実行コマンド
+```
+$ rails generate devise:views:locale it
+$ rails generate devise:views:bootstrap_templates
 ```
 
 ここを参考に  
-http://ruby-rails.hatenadiary.com/entry/20140801/1406907000
+http://ruby-rails.hatenadiary.com/entry/20140801/1406907000  
+https://github.com/hisea/devise-bootstrap-views
